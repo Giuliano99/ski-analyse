@@ -1,0 +1,23 @@
+# Vorlage fuer die Torreihenfolge einer Strecke.
+# Pro Trainingsvideo eine eigene Kopie unter configs/runs/ anlegen,
+# zum Beispiel configs/runs/2026_01_10_lauf1.yaml
+# Diese Datei selbst bleibt Vorlage und wird versioniert.
+
+course_name: "Beispielstrecke"
+video_fps: 50.0          # Framerate des Quellvideos, unbedingt pruefen
+start_frame: null         # Frame des Startsignals, noch zu bestimmen
+
+gates:
+  - id: 1
+    label: "Start"
+    is_start: true
+  - id: 2
+    label: "Tor 2"
+  - id: 3
+    label: "Tor 3"
+  # weitere Tore ergaenzen, Reihenfolge = Reihenfolge auf der Strecke
+
+notes: >
+  Torpositionen selbst werden nicht hier gespeichert, sondern
+  laufen aus der Objekterkennung. Diese Datei legt nur fest,
+  in welcher Reihenfolge erkannte Tore der Strecke zugeordnet werden.

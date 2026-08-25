@@ -1,0 +1,10 @@
+# Platzhalter, wird in Phase 1 konkretisiert sobald Modellwahl feststeht.
+model: "TBD"              # z.B. yolov8n, yolov8s
+image_size: 640
+epochs: 100
+batch_size: 16
+roboflow:
+  workspace: "TBD"
+  project: "TBD"
+  version: "TBD"
+  format: "TBD"            # z.B. yolov8

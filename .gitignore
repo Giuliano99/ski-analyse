@@ -1,0 +1,39 @@
+# Secrets
+.env
+*.key
+
+# Datensatz und Rohdaten
+data/
+datasets/
+*.zip
+
+# Modellgewichte und Trainingsläufe
+runs/
+weights/
+*.pt
+*.onnx
+*.engine
+
+# Analyseergebnisse
+outputs/
+*.csv
+results/*.mp4
+results/*.mov
+
+# Videos (können groß sein, sollen nicht versehentlich eingecheckt werden)
+*.mp4
+*.mov
+*.avi
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Editor
+.vscode/settings.json
+.DS_Store
