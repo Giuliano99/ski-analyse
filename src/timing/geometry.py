@@ -68,3 +68,61 @@ def gate_crossed(
         und rechte Torstange.
     """
     return segments_intersect(prev_athlete_pos, curr_athlete_pos, gate_left, gate_right)
+
+
+def moving_gate_crossing_fraction(
+    prev_athlete_pos: Point,
+    curr_athlete_pos: Point,
+    prev_gate_left: Point,
+    prev_gate_right: Point,
+    curr_gate_left: Point,
+    curr_gate_right: Point,
+    *,
+    iterations: int = 40,
+) -> float | None:
+    """Bestimmt die relative Tordurchfahrt trotz bewegter Kamera.
+
+    Athlet und beide Torpunkte werden zwischen zwei Frames linear
+    interpoliert. Eine Rueckgabe von 0 bis 1 beschreibt den Zeitpunkt
+    innerhalb des Frameintervalls. ``None`` bedeutet keine Durchfahrt.
+    """
+
+    def interpolate(start: Point, end: Point, fraction: float) -> Point:
+        return Point(
+            start.x + (end.x - start.x) * fraction,
+            start.y + (end.y - start.y) * fraction,
+        )
+
+    def side(fraction: float) -> float:
+        athlete = interpolate(prev_athlete_pos, curr_athlete_pos, fraction)
+        left = interpolate(prev_gate_left, curr_gate_left, fraction)
+        right = interpolate(prev_gate_right, curr_gate_right, fraction)
+        return _cross(left, right, athlete)
+
+    side_start = side(0.0)
+    side_end = side(1.0)
+    if side_start == 0 or side_end == 0 or side_start * side_end >= 0:
+        return None
+
+    low, high = 0.0, 1.0
+    for _ in range(iterations):
+        middle = (low + high) / 2.0
+        if side_start * side(middle) <= 0:
+            high = middle
+        else:
+            low = middle
+    fraction = (low + high) / 2.0
+
+    athlete = interpolate(prev_athlete_pos, curr_athlete_pos, fraction)
+    left = interpolate(prev_gate_left, curr_gate_left, fraction)
+    right = interpolate(prev_gate_right, curr_gate_right, fraction)
+    gate_dx = right.x - left.x
+    gate_dy = right.y - left.y
+    gate_length_squared = gate_dx * gate_dx + gate_dy * gate_dy
+    if gate_length_squared == 0:
+        return None
+
+    projection = (
+        (athlete.x - left.x) * gate_dx + (athlete.y - left.y) * gate_dy
+    ) / gate_length_squared
+    return fraction if 0.0 <= projection <= 1.0 else None

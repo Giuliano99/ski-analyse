@@ -3,7 +3,11 @@
 *.key
 
 # Datensatz und Rohdaten
-data/
+data/*
+!data/README.md
+!data/test_videos/
+data/test_videos/*
+!data/test_videos/.gitkeep
 datasets/
 *.zip
 

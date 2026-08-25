@@ -41,6 +41,22 @@ cp .env.example .env
 python -m pytest tests/ -v
 ```
 
+## Testvideos
+
+Lokale Testvideos gehoeren nach `data/test_videos/`. Der Ordnerinhalt
+ist ignoriert und darf nicht eingecheckt werden. Die Zeitmessung kann
+das erste Tor als Zeitnullpunkt verwenden oder einen manuellen
+Startframe aus der Laufkonfiguration lesen.
+
+Eine Laufkonfiguration wird aus der Vorlage erstellt:
+
+```
+cp configs/gates_template.yaml configs/run_test.yaml
+```
+
+`timing.start_mode` ist entweder `first_gate` oder `manual_frame`.
+Beim manuellen Modus muss `timing.manual_start_frame` gesetzt sein.
+
 ## Datensatz und Modellgewichte
 
 Der gelabelte Datensatz liegt in Roboflow, nicht in diesem Repository.

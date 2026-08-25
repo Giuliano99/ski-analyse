@@ -5,7 +5,12 @@
 
 course_name: "Beispielstrecke"
 video_fps: 50.0          # Framerate des Quellvideos, unbedingt pruefen
-start_frame: null         # Frame des Startsignals, noch zu bestimmen
+timing:
+  # first_gate: Durchfahrt des Starttores ist t=0
+  # manual_frame: manual_start_frame ist t=0
+  start_mode: "first_gate"
+  start_gate_id: 1
+  manual_start_frame: null
 
 gates:
   - id: 1

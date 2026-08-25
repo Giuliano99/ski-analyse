@@ -1,5 +1,18 @@
 # Projektplan
 
+## Iteration 1, technischer Durchstich
+
+Stand 25.08.2026:
+
+* Erledigt: lokaler, ignorierter Ablageort `data/test_videos/`
+* Erledigt: Video Reader mit Metadaten, Frame Nummer und Zeitstempel
+* Erledigt: Start ueber erstes Tor oder manuellen Frame
+* Erledigt: interpolierte Tor und Abschnittszeiten mit CSV Export
+* Erledigt: relative Durchfahrtsregel fuer bewegte Kamera und bewegtes Tor
+* Offen: drei bis fuenf repraesentative Originalvideos ablegen
+* Offen: relative Regel und Kamerabewegung auf diesen Videos bewerten
+* Offen: manuelle Referenzpunkte fuer die ausgewaehlten Sequenzen erfassen
+
 ## Phase 1, Modell
 * Datensatz und Labels in Roboflow pruefen, Train/Val/Test Split festlegen
 * Modell zur Torerkennung trainieren (Colab, GPU)
