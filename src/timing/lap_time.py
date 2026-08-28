@@ -76,18 +76,23 @@ class GateCrossingObservation:
     confidence: float = 1.0
     uncertain: bool = False
     uncertain_reason: Optional[str] = None
+    crossing_fraction_override: Optional[float] = None
 
 
 def observation_to_timestamp(observation: GateCrossingObservation) -> float | None:
     """Interpoliert den Durchfahrtszeitpunkt einer manuellen Beobachtung."""
-    fraction = moving_gate_crossing_fraction(
-        observation.prev_athlete_pos,
-        observation.curr_athlete_pos,
-        observation.prev_gate_left,
-        observation.prev_gate_right,
-        observation.curr_gate_left,
-        observation.curr_gate_right,
-    )
+    fraction = observation.crossing_fraction_override
+    if fraction is not None and not 0.0 <= fraction <= 1.0:
+        raise ValueError("crossing_fraction_override muss zwischen 0 und 1 liegen")
+    if fraction is None:
+        fraction = moving_gate_crossing_fraction(
+            observation.prev_athlete_pos,
+            observation.curr_athlete_pos,
+            observation.prev_gate_left,
+            observation.prev_gate_right,
+            observation.curr_gate_left,
+            observation.curr_gate_right,
+        )
     if fraction is None:
         return None
     return observation.prev_timestamp_s + fraction * (

@@ -1,6 +1,6 @@
 # Kernbibliotheken, Versionen pruefen und bei Bedarf aktualisieren
-opencv-python==4.10.0.84
-numpy==1.26.4
+opencv-contrib-python==4.10.0.84
+numpy==2.3.5
 pandas==2.2.2
 matplotlib==3.9.0
 plotly==5.22.0
@@ -8,10 +8,10 @@ pyyaml==6.0.1
 python-dotenv==1.0.1
 pytest==8.2.2
 
-# Objekterkennung und Tracking, Version bewusst noch offen lassen
-# bis Phase 1 abgeschlossen ist und die Modellwahl feststeht
-# ultralytics==8.2.0
+# Lokale Personenerkennung fuer das Athletentracking
+ultralytics==8.4.131
 # supervision==0.21.0
 
 # Roboflow SDK nur lokal fuer Dataset Downloads und Tests noetig
 roboflow==1.1.37
+inference-sdk==1.5.0

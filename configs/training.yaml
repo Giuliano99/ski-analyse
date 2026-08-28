@@ -1,10 +1,13 @@
-# Platzhalter, wird in Phase 1 konkretisiert sobald Modellwahl feststeht.
-model: "TBD"              # z.B. yolov8n, yolov8s
+model: "yolov11n"
 image_size: 640
 epochs: 100
 batch_size: 16
 roboflow:
-  workspace: "TBD"
-  project: "TBD"
-  version: "TBD"
-  format: "TBD"            # z.B. yolov8
+  workspace: "giulianos-workspace-2isr5"
+  project: "ski-3iie6"
+  version: 8
+  model_id: "giulianos-workspace-2isr5/ski-3iie6-8-yolo11n-t1"
+  format: "yolov5pytorch"
+inference:
+  confidence: 0.35
+  overlap: 0.50

@@ -8,6 +8,9 @@ data/*
 !data/test_videos/
 data/test_videos/*
 !data/test_videos/.gitkeep
+!data/manual_annotations/
+data/manual_annotations/*
+!data/manual_annotations/.gitkeep
 datasets/
 *.zip
 

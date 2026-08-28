@@ -1,0 +1,11 @@
+video_name: run3.mp4
+tolerance_frames: 2
+crossings:
+  - gate_id: 1
+    frame_number: 70
+  - gate_id: 2
+    frame_number: 124
+  - gate_id: 3
+    frame_number: 171
+  - gate_id: 4
+    frame_number: 230

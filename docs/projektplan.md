@@ -9,9 +9,10 @@ Stand 25.08.2026:
 * Erledigt: Start ueber erstes Tor oder manuellen Frame
 * Erledigt: interpolierte Tor und Abschnittszeiten mit CSV Export
 * Erledigt: relative Durchfahrtsregel fuer bewegte Kamera und bewegtes Tor
-* Offen: drei bis fuenf repraesentative Originalvideos ablegen
-* Offen: relative Regel und Kamerabewegung auf diesen Videos bewerten
-* Offen: manuelle Referenzpunkte fuer die ausgewaehlten Sequenzen erfassen
+* Erledigt: drei repraesentative Originalvideos abgelegt und technisch geprueft
+* Erledigt: Kamerabewegung bewertet, `run3` als erster Referenzlauf ausgewaehlt
+* Erledigt: lokales Werkzeug fuer manuelle Referenzpunkte implementiert
+* Offen: Tordurchfahrten in `run3`, danach `run2` und `run1` markieren
 
 ## Phase 1, Modell
 * Datensatz und Labels in Roboflow pruefen, Train/Val/Test Split festlegen

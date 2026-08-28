@@ -19,12 +19,52 @@ gilt das Tor als passiert.
 """
 
 from dataclasses import dataclass
+from statistics import median
 
 
 @dataclass(frozen=True)
 class Point:
     x: float
     y: float
+
+
+@dataclass(frozen=True)
+class BoundingBox:
+    """Achsenparallele Box mit expliziten Bildkoordinaten."""
+
+    left: float
+    top: float
+    right: float
+    bottom: float
+
+    def __post_init__(self) -> None:
+        if self.right <= self.left or self.bottom <= self.top:
+            raise ValueError("BoundingBox muss eine positive Groesse haben")
+
+    @classmethod
+    def from_top_left_xywh(
+        cls, x: float, y: float, width: float, height: float
+    ) -> "BoundingBox":
+        return cls(x, y, x + width, y + height)
+
+    @classmethod
+    def from_center_xywh(
+        cls, x: float, y: float, width: float, height: float
+    ) -> "BoundingBox":
+        return cls(x - width / 2, y - height / 2, x + width / 2, y + height / 2)
+
+    @property
+    def center(self) -> Point:
+        return Point((self.left + self.right) / 2, (self.top + self.bottom) / 2)
+
+
+@dataclass(frozen=True)
+class BoxGateCrossing:
+    """Boxbasierter Schnitt inklusive expliziter Unsicherheitsangabe."""
+
+    fraction: float
+    supporting_points: int
+    uncertain: bool
 
 
 def _cross(o: Point, a: Point, b: Point) -> float:
@@ -126,3 +166,62 @@ def moving_gate_crossing_fraction(
         (athlete.x - left.x) * gate_dx + (athlete.y - left.y) * gate_dy
     ) / gate_length_squared
     return fraction if 0.0 <= projection <= 1.0 else None
+
+
+def moving_box_gate_crossing(
+    prev_athlete_box: BoundingBox,
+    curr_athlete_box: BoundingBox,
+    prev_gate_box: BoundingBox,
+    curr_gate_box: BoundingBox,
+    *,
+    horizontal_samples: tuple[float, ...] = (0.0, 0.5, 1.0),
+) -> BoxGateCrossing | None:
+    """Prueft die untere Athletenkante gegen die mitbewegte Torunterkante.
+
+    Die Torunterkante approximiert die Linie zwischen den beiden Stangenfuessen.
+    Mehrere Punkte entlang der unteren Athletenbox bilden Koerper und Ski robuster
+    ab als ein einzelner Fusspunkt. Der Median der gueltigen Schnitte begrenzt den
+    Einfluss einer einzelnen Boxkante.
+    """
+
+    if not horizontal_samples or any(
+        sample < 0.0 or sample > 1.0 for sample in horizontal_samples
+    ):
+        raise ValueError("horizontal_samples muessen zwischen 0 und 1 liegen")
+
+    prev_gate_left = Point(prev_gate_box.left, prev_gate_box.bottom)
+    prev_gate_right = Point(prev_gate_box.right, prev_gate_box.bottom)
+    curr_gate_left = Point(curr_gate_box.left, curr_gate_box.bottom)
+    curr_gate_right = Point(curr_gate_box.right, curr_gate_box.bottom)
+
+    fractions: list[float] = []
+    for sample in horizontal_samples:
+        prev_point = Point(
+            prev_athlete_box.left
+            + (prev_athlete_box.right - prev_athlete_box.left) * sample,
+            prev_athlete_box.bottom,
+        )
+        curr_point = Point(
+            curr_athlete_box.left
+            + (curr_athlete_box.right - curr_athlete_box.left) * sample,
+            curr_athlete_box.bottom,
+        )
+        fraction = moving_gate_crossing_fraction(
+            prev_point,
+            curr_point,
+            prev_gate_left,
+            prev_gate_right,
+            curr_gate_left,
+            curr_gate_right,
+        )
+        if fraction is not None:
+            fractions.append(fraction)
+
+    if not fractions:
+        return None
+    supporting_points = len(fractions)
+    return BoxGateCrossing(
+        fraction=float(median(fractions)),
+        supporting_points=supporting_points,
+        uncertain=supporting_points < 2,
+    )
